@@ -1,7 +1,7 @@
 <?php
 
 $full_data=[];
-
+$words=[];
 $file = fopen('data/task1-train.csv', 'r');
 while (($line = fgetcsv($file,0,"\t")) !== FALSE) {
 	if (count($line)==3) {
@@ -18,4 +18,10 @@ while (($line = fgetcsv($file,0,"\t")) !== FALSE) {
   }
 fclose($file);
 
-var_dump($full_data); die;
+foreach ($full_data as $key => $value) {
+	$tmp_words=explode(" ", $value[1]);
+	$words=array_merge($words,$tmp_words);
+}
+$unique_values = array_count_values($words);
+
+var_dump($unique_values); die;
