@@ -10,4 +10,12 @@ while (($line = fgetcsv($file,0,"\t")) !== FALSE) {
   }
 fclose($file);
 
+$file = fopen('data/task1-testGold.csv', 'r');
+while (($line = fgetcsv($file,0,"\t")) !== FALSE) {
+	if (count($line)==3) {
+		array_push($full_data, $line);
+	}
+  }
+fclose($file);
+
 var_dump($full_data); die;
