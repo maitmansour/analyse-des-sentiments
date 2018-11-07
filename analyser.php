@@ -63,7 +63,7 @@ foreach ($full_data as $keyFD => $valueFD) {
 
 	}
 
-	$tmp_contents.=$label." ".$tmp_pair."\n";
+	$tmp_contents.=$label." ".substr($tmp_pair, 0,-1)."\0";
 	if($keyFD==$train_limit){
 		echo file_put_contents("/var/www/html/analyse-des-sentiments/output/train.svm",$tmp_contents);
 		$tmp_contents="";
