@@ -3,7 +3,7 @@
 $full_data=[];
 $words=[];
 $index=1;
-
+$train_limit=0;
 $file = fopen('data/task1-train.csv', 'r');
 while (($line = fgetcsv($file,0,"\t")) !== FALSE) {
 	if (count($line)==3) {
@@ -11,6 +11,7 @@ while (($line = fgetcsv($file,0,"\t")) !== FALSE) {
 	}
   }
 fclose($file);
+$train_limit=count($full_data)-1;
 
 $file = fopen('data/task1-testGold.csv', 'r');
 while (($line = fgetcsv($file,0,"\t")) !== FALSE) {
@@ -20,10 +21,11 @@ while (($line = fgetcsv($file,0,"\t")) !== FALSE) {
   }
 fclose($file);
 
-foreach ($full_data as $key => $value) {
-	$tmp_words=explode(" ", $value[1]);
+$tmp_contents="";
+foreach ($full_data as $keyFD => $valueFD) {
+	$tmp_words=explode(" ", $valueFD[1]);
 
-	switch ($value[2]) {
+	switch ($valueFD[2]) {
 		case 'objective':
 			$label="0";
 			break;
@@ -58,18 +60,14 @@ foreach ($full_data as $key => $value) {
 		}
 
 		$tmp_pair.=$index_word.":".$tmp_repetition." ";
-		/*echo $tmp_pair;
-			if ($index==40) {
-			die;
-		}*/
 
 	}
 
-	//$words=array_merge($words,$tmp_words);
-
-	echo $label." ".$tmp_pair."<br>";
-			if ($index==2) {
-			die;
-		}
-
+	$tmp_contents.=$label." ".$tmp_pair."\n";
+	if($keyFD==$train_limit){
+		echo file_put_contents("/var/www/html/analyse-des-sentiments/output/train.svm",$tmp_contents);
+		$tmp_contents="";
+	}
 }
+
+		echo file_put_contents("/var/www/html/analyse-des-sentiments/output/test.svm",$tmp_contents);
