@@ -29,13 +29,13 @@ foreach ($full_data as $keyFD => $valueFD) {
 		case 'objective':
 			$label="0";
 			break;
-		case 'positif':
+		case 'positive':
 			$label="1";
 			break;
 		case 'negative':
 			$label="2";
 			break;
-		case 'mixte':
+		case 'mixed':
 			$label="3";
 			break;
 		default:
@@ -43,6 +43,7 @@ foreach ($full_data as $keyFD => $valueFD) {
 	}
 
 	$tmp_pair="";
+	$tmp_pairs_array=[];
 	foreach ($tmp_words as $key => $value) {
 		if (isset($words[$value])) {
 			$index_word=$words[$value];
@@ -59,11 +60,14 @@ foreach ($full_data as $keyFD => $valueFD) {
 			}
 		}
 
-		$tmp_pair.=$index_word.":".$tmp_repetition." ";
+		$tmp_pair=$index_word.":".$tmp_repetition;
+		$tmp_pairs_array[$index_word]=$tmp_pair;
 
 	}
-
-	$tmp_contents.=$label." ".substr($tmp_pair, 0,-1)."\0";
+	ksort($tmp_pairs_array);
+	//var_dump($tmp_pairs_array); die;
+	$tmp_pair=implode(" ", $tmp_pairs_array);
+	$tmp_contents.=$label." ".$tmp_pair."\n";
 	if($keyFD==$train_limit){
 		echo file_put_contents("/var/www/html/analyse-des-sentiments/output/train.svm",$tmp_contents);
 		$tmp_contents="";
